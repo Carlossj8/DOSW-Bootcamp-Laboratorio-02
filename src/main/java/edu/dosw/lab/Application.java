@@ -2,6 +2,7 @@ package edu.dosw.lab;
 
 import edu.dosw.lab.creacionales.reto2.SastreAMedida;
 import edu.dosw.lab.creacionales.reto3.FabricaDeInstrumentos;
+import edu.dosw.lab.creacionales.reto4.BalanzaMercado;
 
 import java.util.Scanner;
 
@@ -39,7 +40,7 @@ public class Application {
                 FabricaDeInstrumentos.ejecutar();
                 break;
             case "4":
-                System.out.println("Reto 4 aún no implementado.");
+                BalanzaMercado.ejecutar();
                 break;
             case "5":
                 System.out.println("Reto 5 aún no implementado.");
