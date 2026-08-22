@@ -1,4 +1,4 @@
-package main.java.edu.dosw.lab.comportamiento.reto1;
+package edu.dosw.lab.comportamiento.reto1;
 
 /**
  * Línea de la orden: un producto y la cantidad pedida.

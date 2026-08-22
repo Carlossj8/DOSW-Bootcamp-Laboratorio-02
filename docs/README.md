@@ -25,8 +25,8 @@ El archivo pom.xml es el archivo de configuración principal de un proyecto Mave
 ## 07. ¿Qué diferencia hay entre mvn compile, mvn package y mvn install?
 
 * mvn compile: compila el código fuente del proyecto.
-* mvn package: compila el proyecto y genera el paquete, por ejemplo un archivo `.jar`.
-* mvn install: realiza el proceso de `package` y además instala el paquete en el repositorio local de Maven para que pueda ser utilizado por otros proyectos.
+* mvn package: compila el proyecto y genera el paquete, por ejemplo un archivo .jar.
+* mvn install: realiza el proceso de package y además instala el paquete en el repositorio local de Maven para que pueda ser utilizado por otros proyectos.
 
 ## 08. ¿Qué diferencia existe entre una interfaz y una clase abstracta?
 
@@ -39,7 +39,7 @@ Sistema de boletería que permite armar una orden con boletas y confitería, apl
 
 Entrada esperada por línea de la orden: codigo cantidad (ej. boleta3d 2).
 Códigos disponibles: `boleta2d`, `boleta3d`, `crispetas`, `gaseosa`. Se termina
-escribiendo `fin`.
+escribiendo fin.
 
 ## Patrón de diseño utilizado
 
@@ -51,7 +51,7 @@ escribiendo `fin`.
   factura. Strategy encapsula cada algoritmo de descuento en su propia clase
   y permite intercambiarlos en tiempo de ejecución.
 - **Cómo se aplicó:**
-    - TipoEspectador (interfaz): declara el contrato `calcularDescuento(subtotal)`.
+    - TipoEspectador (interfaz): declara el contrato calcularDescuento(subtotal).
     - EspectadorGeneral, Estudiante, TerceraEdad: estrategias concretas,
       cada una con su propio porcentaje.
     - Orden: el "contexto": recibe una `TipoEspectador` por constructor y le
@@ -65,8 +65,47 @@ polimórfica y extensible.
 
 | Principio | Dónde | Cómo |
 |-------|---|---|
-| **SRP** | Orden, TipoEspectador, ItemOrden | Cada clase tiene una única responsabilidad: `Orden` coordina la orden, `TipoEspectador` calcula el descuento, `ItemOrden` calcula el subtotal de su línea. |
-| **OCP** | TipoEspectador, Producto | Se pueden agregar nuevos tipos de espectador o nuevos productos creando nuevas subclases, sin modificar `Orden`. |
-| **LSP** | `Boleta`/`ArticuloConfiteria` sobre `Producto`; cualquier `TipoEspectador` sobre la interfaz | Cualquier subtipo puede usarse donde se espera el tipo base sin romper el comportamiento de `Orden`. |
-| **ISP** | TipoEspectador | Interfaz mínima con un solo método relevante (`calcularDescuento`), ningún cliente depende de métodos que no usa. |
+| **SRP** | Orden, TipoEspectador, ItemOrden | Cada clase tiene una única responsabilidad: Orden coordina la orden, TipoEspectador calcula el descuento, ItemOrden calcula el subtotal de su línea. |
+| **OCP** | TipoEspectador, Producto | Se pueden agregar nuevos tipos de espectador o nuevos productos creando nuevas subclases, sin modificar Orden. |
+| **LSP** | Boleta/ArticuloConfiteria sobre Producto; cualquier TipoEspectador sobre la interfaz | Cualquier subtipo puede usarse donde se espera el tipo base sin romper el comportamiento de Orden. |
+| **ISP** | TipoEspectador | Interfaz mínima con un solo método relevante (calcularDescuento), ningún cliente depende de métodos que no usa. |
 | **DIP** | Orden | Depende de la abstracción TipoEspectador, no de una implementación concreta; la estrategia se inyecta por constructor. |
+
+---
+
+<!-- Espacio reservado para documentación de Reto 2, Reto 3, Reto 4 y Reto 5 -->
+
+
+---
+
+## Reto 6 — Sala de Urgencias
+
+Sistema para la sala de urgencias del Hospital San Rafael que clasifica y atiende pacientes según la gravedad de su dolencia y prioridad, derivándolos a través de una cadena secuencial de profesionales de salud hasta ser atendidos o remitidos a otra institución.
+
+Entrada esperada:
+- Cantidad de pacientes.
+- Por cada paciente: Síntoma/Dolencia, Nivel de gravedad (Leve, Moderado, Grave, Crítico) y Prioridad (Baja, Media, Alta).
+
+## Patrón de diseño utilizado
+
+- **Categoría:** Comportamiento
+- **Patrón:** **Chain of Responsibility**
+- **Justificación:** el flujo de triage y atención médica requiere que una solicitud (el paciente con síntoma, gravedad y prioridad) sea evaluada secuencialmente por una serie de profesionales con distintas competencias. Cada profesional analiza si puede resolver el caso; si no está capacitado, delega la responsabilidad al siguiente eslabón de la cadena de forma desacoplada, hasta llegar al final donde se marca como remitido a otra institución si nadie pudo atenderlo.
+- **Cómo se aplicó:**
+    - ProfesionalSalud (clase abstracta base): declara el contrato `procesar(paciente)`, el enlace al siguiente manejador y la lógica para delegar al siguiente profesional.
+    - Enfermero, MedicoGeneral, Especialista: manejadores concretos, cada uno configurado con el nivel que puede atender (Leve, Moderado o Grave) y su prioridad máxima.
+    - CadenaAtencion: ensambla la secuencia de atención (Enfermero -> MedicoGeneral -> Especialista) y despacha los pacientes a la cadena.
+    - Paciente: modelo que transporta la información de la dolencia y el estado final de la atención.
+    - SalaUrgencias: gestiona la interacción con el usuario y genera las estadísticas finales usando Streams.
+
+## Principios SOLID aplicados
+
+| Principio | Dónde | Cómo |
+|---|---|---|
+| **SRP** | ProfesionalSalud, Paciente, CadenaAtencion | Paciente solo almacena datos clínicos y estado, cada profesional solo evalúa su nivel de competencia, y CadenaAtencion solo se encarga del ensamblado y despacho. |
+| **OCP** | Jerarquía ProfesionalSalud | Se pueden añadir nuevos profesionales a la cadena (por ejemplo, Cirujano o Terapeuta) creando nuevas subclases sin modificar las existentes ni alterar a Paciente. |
+| **LSP** | Enfermero, MedicoGeneral, Especialista | Cualquier profesional concreto puede sustituir a la clase base ProfesionalSalud sin alterar el funcionamiento de la cadena. |
+| **ISP** | ProfesionalSalud | Define únicamente los métodos necesarios para la propagación y procesamiento de la solicitud, sin forzar métodos innecesarios. |
+| **DIP** | CadenaAtencion y eslabones de la cadena | Los componentes interactúan a través de la abstracción ProfesionalSalud en lugar de acoplarse a clases concretas. |
+
+

@@ -1,4 +1,4 @@
-package main.java.edu.dosw.lab.comportamiento.reto1;
+package edu.dosw.lab.comportamiento.reto1;
 
 
 import java.util.LinkedHashMap;
@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Reto1BoleteriaAstor {
+
 
     public static void ejecutar() {
         Scanner sc = new Scanner(System.in);
