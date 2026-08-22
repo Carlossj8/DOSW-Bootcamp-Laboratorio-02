@@ -1,14 +1,13 @@
-package main.java.edu.dosw.lab;
+package edu.dosw.lab;
 
-import main.java.edu.dosw.lab.comportamiento.reto1.Reto1BoleteriaAstor;
+import edu.dosw.lab.creacionales.reto2.SastreAMedida;
 
 public class Application {
-
     public static void main(String[] args) {
-        // Reto 1
-        Reto1BoleteriaAstor.ejecutar();
+        // System.out.println(
+        //     "Proyecto Maven configurado y corriendo correctamente"
+        // );
 
-        // Reto 2
-
+        SastreAMedida.ejecutar();
     }
 }
