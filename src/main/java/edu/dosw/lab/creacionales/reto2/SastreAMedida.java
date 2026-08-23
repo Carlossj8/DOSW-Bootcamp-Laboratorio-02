@@ -1,6 +1,7 @@
 package edu.dosw.lab.creacionales.reto2;
 
 import java.util.Scanner;
+import edu.dosw.lab.creacionales.reto2.TrajeBuilder;
 
 public final class SastreAMedida {
 

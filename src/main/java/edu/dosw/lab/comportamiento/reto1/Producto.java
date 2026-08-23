@@ -1,4 +1,4 @@
-package main.java.edu.dosw.lab.comportamiento.reto1;
+package edu.dosw.lab.comportamiento.reto1;
 
 /**
  * Representa un producto vendible en la boletería (boleta o artículo de confitería).

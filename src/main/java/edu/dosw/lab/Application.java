@@ -1,9 +1,12 @@
 package edu.dosw.lab;
 
+import edu.dosw.lab.comportamiento.reto1.Reto1BoleteriaAstor;
 import edu.dosw.lab.creacionales.reto2.SastreAMedida;
 import edu.dosw.lab.creacionales.reto3.FabricaDeInstrumentos;
 import edu.dosw.lab.creacionales.reto4.BalanzaMercado;
 import edu.dosw.lab.estructurales.reto5.MotoPersonalizada;
+import edu.dosw.lab.comportamiento.reto6.SalaUrgencias;
+import edu.dosw.lab.comportamiento.reto7.RoverExploradorMarte;
 
 import java.util.Scanner;
 
@@ -31,8 +34,8 @@ public class Application {
 
         switch (opcion) {
             case "1":
-                // Reto1BoleteriaAstor.ejecutar();
-                System.out.println("Reto 1 aún no está conectado aquí.");
+                Reto1BoleteriaAstor.ejecutar();
+
                 break;
             case "2":
                 SastreAMedida.ejecutar();
@@ -47,10 +50,10 @@ public class Application {
                 MotoPersonalizada.ejecutar();
                 break;
             case "6":
-                System.out.println("Reto 6 aún no implementado.");
+                SalaUrgencias.ejecutar(sc);
                 break;
             case "7":
-                System.out.println("Reto 7 aún no implementado.");
+                RoverExploradorMarte.ejecutar(sc);
                 break;
             case "8":
                 System.out.println("Reto 8 aún no implementado.");

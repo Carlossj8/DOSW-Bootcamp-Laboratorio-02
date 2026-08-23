@@ -1,4 +1,4 @@
-package main.java.edu.dosw.lab.comportamiento.reto1;
+package edu.dosw.lab.comportamiento.reto1;
 
 
 /** Estrategia concreta: estudiante, 15% de descuento. */
