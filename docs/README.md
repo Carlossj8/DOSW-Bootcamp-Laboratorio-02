@@ -106,6 +106,18 @@ polimórfica y extensible.
     - ControlRover: invocador (Invoker) que mantiene el historial de comandos ejecutados y gestiona la reversión de acciones individuales por su número de registro.
     - RoverExploradorMarte: clase principal que coordina la entrada interactiva de acciones y operadores, gestiona la opción de deshacer y muestra el historial final.
 
+## Reto 8 — La Academia de Fútbol de los UML
 
+- **Patrón de Diseño:** Estructural
+- **Patrón Utilizado:** Decorator
+- **Justificación:** no todos los jugadores necesitan los mismos atributos adicionales (posición secundaria, país de origen, historial de lesiones, valor de mercado), y estos datos pueden variar o crecer con el tiempo sin afectar a toda la jerarquía de jugadores. Usar herencia para representar cada combinación posible generaría una explosión de subclases (ArqueroConPaisOrigen, DelanteroConValorMercadoYLesiones, etc.). El Decorator permite añadir estas características de forma dinámica, en tiempo de ejecución, envolviendo un jugador existente sin modificar su clase ni las clases de sus posiciones, respetando además el principio de abierto/cerrado.
+- **Cómo lo aplicamos:**
+    - Jugador: clase abstracta que actúa como componente base; define los atributos y comportamiento comunes a toda posición (nombre, edad, dorsal, peso, altura, estado físico, categoría) y declara patear() como método abstracto para ser sobrescrito polimórficamente.
+    - Arquero, Defensa, Delantero: componentes concretos que heredan de Jugador, sobrescriben patear() con su propia lógica y agregan atributos y métodos exclusivos de su posición (atajar(), entrada(), regatear()).
+    - JugadorDecorator: decorador abstracto que también extiende Jugador; mantiene una referencia interna al objeto Jugador que envuelve y delega en él las llamadas a patear() y entrenar(), permitiendo que un jugador decorado siga comportándose como cualquier otro Jugador.
+    - PosicionSecundariaDecorator, PaisOrigenDecorator, HistorialLesionesDecorator, ValorMercadoDecorator: decoradores concretos que extienden JugadorDecorator; cada uno agrega un único atributo dinámico con sus respectivos getters y setters, sin tocar la clase Jugador ni sus subclases de posición.
+    - Entrenador: se asocia con Jugador (1 a muchos) para dirigir, evaluar y planear sesiones sobre cualquier jugador, decorado o no, gracias a que ambos comparten el mismo tipo base.
+    - Hincha: se asocia con Jugador y con Entrenador (muchos a muchos) para animar, pedir autógrafos y publicar fotos, interactuando también de forma transparente con jugadores decorados.
 
-
+![Diagrama UML - Reto 8](imagenes/reto8UML.png)
+
