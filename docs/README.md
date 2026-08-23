@@ -83,7 +83,7 @@ polimórfica y extensible.
 - **Patrón de Diseño:** Comportamiento
 - **Patrón Utilizado:** Chain of Responsibility
 - **Justificación:** el flujo de atención médica requiere que una solicitud (el paciente con síntoma, gravedad y prioridad) sea evaluada secuencialmente por una serie de profesionales con distintas competencias. Cada profesional analiza si puede resolver el caso; si no está capacitado, delega la responsabilidad al siguiente eslabón de la cadena de forma desacoplada, hasta llegar al final donde se marca como remitido a otra institución si ningún profesional pudo atenderlo.
-- **Cómo lo apliqué:**
+- **Cómo lo aplicamos:**
     - ProfesionalSalud: clase abstracta base (Handler) que define el contrato procesar(paciente), el enlace al siguiente profesional (siguiente) y la lógica para delegar al siguiente en la cadena.
     - Enfermero: manejador concreto que atiende pacientes de nivel Leve y prioridad máxima Baja (1). Si no puede atenderlo, lo pasa al siguiente.
     - MedicoGeneral: manejador concreto que atiende pacientes de nivel Moderado y prioridad máxima Media (2). Si no puede atenderlo, lo pasa al siguiente.
@@ -99,7 +99,7 @@ polimórfica y extensible.
 - **Patrón de Diseño:** Comportamiento
 - **Patrón Utilizado:** Command
 - **Justificación:** cada acción enviada al rover por los distintos operadores debe ser tratada como un objeto independiente parametrizable, con la capacidad de ser ejecutada, registrada en un historial cronológico para auditoría y deshecha (undo) de manera individual sin acoplar el controlador de misión a los subsistemas del rover.
-- **Cómo lo apliqué:**
+- **Cómo lo aplicamos:**
     - Comando: interfaz base que declara el contrato para ejecutar(), deshacer(), consultar operador, módulo, descripción con parámetros y estado de reversión.
     - ComandoMotor, ComandoBrazo, ComandoCamara, ComandoTaladro: comandos concretos que encapsulan los parámetros (metros, segundos, profundidad, acción) y ejecutan o revierten la operación sobre su receptor correspondiente.
     - Motor, Brazo, Camara, Taladro: clases receptoras (Receivers) que implementan las acciones físicas de cada módulo del rover.
