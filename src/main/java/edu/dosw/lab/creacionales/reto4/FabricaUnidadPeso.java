@@ -1,11 +1,12 @@
 package edu.dosw.lab.creacionales.reto4;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 public final class FabricaUnidadPeso {
 
-    private static final Map<String, Double> FACTORES_A_KG = new HashMap<>();
+    private static final Map<String, Double> FACTORES_A_KG = new LinkedHashMap<>();
 
     static {
         FACTORES_A_KG.put("g", 1000.0);
@@ -17,12 +18,23 @@ public final class FabricaUnidadPeso {
     private FabricaUnidadPeso() {
     }
 
+    public static boolean esValida(String codigo) {
+        return codigo != null && FACTORES_A_KG.containsKey(normalizar(codigo));
+    }
+
     public static double obtenerFactor(String codigo) {
-        String clave = codigo.trim().toLowerCase();
-        Double factor = FACTORES_A_KG.get(clave);
+        Double factor = FACTORES_A_KG.get(normalizar(codigo));
         if (factor == null) {
             throw new IllegalArgumentException("Unidad no reconocida: " + codigo);
         }
         return factor;
+    }
+
+    public static Set<String> obtenerUnidadesDisponibles() {
+        return FACTORES_A_KG.keySet();
+    }
+
+    private static String normalizar(String codigo) {
+        return codigo.trim().toLowerCase();
     }
 }
