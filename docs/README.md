@@ -80,32 +80,32 @@ polimórfica y extensible.
 
 ## Reto 6 — Sala de Urgencias
 
-Sistema para la sala de urgencias del Hospital San Rafael que clasifica y atiende pacientes según la gravedad de su dolencia y prioridad, derivándolos a través de una cadena secuencial de profesionales de salud hasta ser atendidos o remitidos a otra institución.
+- **Patrón de Diseño:** Comportamiento
+- **Patrón Utilizado:** Chain of Responsibility
+- **Justificación:** el flujo de atención médica requiere que una solicitud (el paciente con síntoma, gravedad y prioridad) sea evaluada secuencialmente por una serie de profesionales con distintas competencias. Cada profesional analiza si puede resolver el caso; si no está capacitado, delega la responsabilidad al siguiente eslabón de la cadena de forma desacoplada, hasta llegar al final donde se marca como remitido a otra institución si ningún profesional pudo atenderlo.
+- **Cómo lo apliqué:**
+    - ProfesionalSalud: clase abstracta base (Handler) que define el contrato procesar(paciente), el enlace al siguiente profesional (siguiente) y la lógica para delegar al siguiente en la cadena.
+    - Enfermero: manejador concreto que atiende pacientes de nivel Leve y prioridad máxima Baja (1). Si no puede atenderlo, lo pasa al siguiente.
+    - MedicoGeneral: manejador concreto que atiende pacientes de nivel Moderado y prioridad máxima Media (2). Si no puede atenderlo, lo pasa al siguiente.
+    - Especialista: manejador concreto que atiende pacientes de nivel Grave y prioridad máxima Alta (3). Si no puede atenderlo, lo pasa al siguiente.
+    - CadenaAtencion: configura y ensambla la secuencia de atención (Enfermero -> MedicoGeneral -> Especialista) y despacha a los pacientes.
+    - Paciente: clase que representa la solicitud y almacena la información clínica (síntoma, nivel, prioridad) y el estado final de atención.
+    - SalaUrgencias: clase principal que gestiona la interacción con el usuario, coordina la atención y calcula las estadísticas finales usando Streams.
 
-Entrada esperada:
-- Cantidad de pacientes.
-- Por cada paciente: Síntoma/Dolencia, Nivel de gravedad (Leve, Moderado, Grave, Crítico) y Prioridad (Baja, Media, Alta).
+---
 
-## Patrón de diseño utilizado
+## Reto 7 — El Rover Explorador de Marte
 
-- **Categoría:** Comportamiento
-- **Patrón:** **Chain of Responsibility**
-- **Justificación:** el flujo de triage y atención médica requiere que una solicitud (el paciente con síntoma, gravedad y prioridad) sea evaluada secuencialmente por una serie de profesionales con distintas competencias. Cada profesional analiza si puede resolver el caso; si no está capacitado, delega la responsabilidad al siguiente eslabón de la cadena de forma desacoplada, hasta llegar al final donde se marca como remitido a otra institución si nadie pudo atenderlo.
-- **Cómo se aplicó:**
-    - ProfesionalSalud (clase abstracta base): declara el contrato `procesar(paciente)`, el enlace al siguiente manejador y la lógica para delegar al siguiente profesional.
-    - Enfermero, MedicoGeneral, Especialista: manejadores concretos, cada uno configurado con el nivel que puede atender (Leve, Moderado o Grave) y su prioridad máxima.
-    - CadenaAtencion: ensambla la secuencia de atención (Enfermero -> MedicoGeneral -> Especialista) y despacha los pacientes a la cadena.
-    - Paciente: modelo que transporta la información de la dolencia y el estado final de la atención.
-    - SalaUrgencias: gestiona la interacción con el usuario y genera las estadísticas finales usando Streams.
+- **Patrón de Diseño:** Comportamiento
+- **Patrón Utilizado:** Command
+- **Justificación:** cada acción enviada al rover por los distintos operadores debe ser tratada como un objeto independiente parametrizable, con la capacidad de ser ejecutada, registrada en un historial cronológico para auditoría y deshecha (undo) de manera individual sin acoplar el controlador de misión a los subsistemas del rover.
+- **Cómo lo apliqué:**
+    - Comando: interfaz base que declara el contrato para ejecutar(), deshacer(), consultar operador, módulo, descripción con parámetros y estado de reversión.
+    - ComandoMotor, ComandoBrazo, ComandoCamara, ComandoTaladro: comandos concretos que encapsulan los parámetros (metros, segundos, profundidad, acción) y ejecutan o revierten la operación sobre su receptor correspondiente.
+    - Motor, Brazo, Camara, Taladro: clases receptoras (Receivers) que implementan las acciones físicas de cada módulo del rover.
+    - ControlRover: invocador (Invoker) que mantiene el historial de comandos ejecutados y gestiona la reversión de acciones individuales por su número de registro.
+    - RoverExploradorMarte: clase principal que coordina la entrada interactiva de acciones y operadores, gestiona la opción de deshacer y muestra el historial final.
 
-## Principios SOLID aplicados
 
-| Principio | Dónde | Cómo |
-|---|---|---|
-| **SRP** | ProfesionalSalud, Paciente, CadenaAtencion | Paciente solo almacena datos clínicos y estado, cada profesional solo evalúa su nivel de competencia, y CadenaAtencion solo se encarga del ensamblado y despacho. |
-| **OCP** | Jerarquía ProfesionalSalud | Se pueden añadir nuevos profesionales a la cadena (por ejemplo, Cirujano o Terapeuta) creando nuevas subclases sin modificar las existentes ni alterar a Paciente. |
-| **LSP** | Enfermero, MedicoGeneral, Especialista | Cualquier profesional concreto puede sustituir a la clase base ProfesionalSalud sin alterar el funcionamiento de la cadena. |
-| **ISP** | ProfesionalSalud | Define únicamente los métodos necesarios para la propagación y procesamiento de la solicitud, sin forzar métodos innecesarios. |
-| **DIP** | CadenaAtencion y eslabones de la cadena | Los componentes interactúan a través de la abstracción ProfesionalSalud en lugar de acoplarse a clases concretas. |
 
 
