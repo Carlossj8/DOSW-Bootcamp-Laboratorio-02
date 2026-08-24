@@ -101,10 +101,32 @@ polimórfica y extensible.
     - FabricaDeInstrumentos: clase principal interactiva que guía al usuario para elegir cantidad, familia, modelo y gama de cada instrumento, delegando la creación a la fábrica seleccionada.
 
 ---
+## Reto 4 — La Balanza Trucada del Mercado
 
-<!-- Espacio reservado para documentación de Reto 4 y Reto 5 -->
+- **Patrón de Diseño:** Creacional
+- **Patrón Utilizado:** Fábrica Simple (Simple Factory)
+- **Justificación:** al principio pensamos en Strategy, porque parecía que cada unidad necesitaba su propia forma de convertir. Pero al analizarlo bien nos dimos cuenta de que todas las conversiones son la misma operación matemática, multiplicar o dividir por un factor; lo único que cambia es ese número según la unidad. No hay comportamiento distinto que justifique una interfaz con varias implementaciones, así que optamos por una Fábrica Simple que centraliza esos factores en un solo lugar. Esto deja el sistema igual de extensible, agregar una unidad nueva es solo una entrada más en la tabla, pero sin la complejidad innecesaria de una jerarquía de estrategias.
+- **Cómo lo aplicamos:**
+    - FabricaUnidadPeso: centraliza la tabla de factores de conversión para gramo, libra, arroba y kilogramo, expresados como unidades por kilogramo. Expone obtenerFactor para obtener el factor de una unidad, esValida para verificar si una unidad existe y obtenerUnidadesDisponibles para apoyar la validación de las entradas del usuario.
+    - ConversorPeso: ejecuta la conversión usando el kilogramo como punto de referencia intermedio. Primero convierte la cantidad de origen a kilogramos dividiendo por su factor, y luego a la unidad destino multiplicando por el factor correspondiente. Así se puede convertir entre cualquier par de unidades sin necesitar una fórmula distinta para cada combinación.
+    - Pesaje: modelo inmutable que guarda un pesaje ya convertido: la cantidad original, la unidad de origen, la cantidad convertida, la unidad de destino y su equivalente en kilogramos, que se usa después para calcular el acumulado total.
+    - FormateadorNumeros: separa el parseo y el formato de los números del resto de la lógica de negocio, manejando separador de miles con punto y decimales con coma.
+    - BalanzaMercado: guía al usuario preguntando cuántos pesajes quiere calcular y, por cada uno, pide la cantidad, la unidad de origen y la unidad de destino de forma separada. Cada dato se valida antes de aceptarlo y se vuelve a preguntar si el usuario se equivoca. Al final usa Streams para sumar el equivalente en kilogramos de todos los pesajes y mostrar el total acumulado.
 
+---
 
+## Reto 5 — La Moto Personalizada
+
+- **Patrón de Diseño:** Estructural
+- **Patrón Utilizado:** Decorator
+- **Justificación:** el enunciado pide que se puedan agregar accesorios, pinturas y complementos a una moto sin tocar la clase de la moto base, lo que es el Principio Abierto/Cerrado aplicado directamente. Pensamos en usar herencia para representar cada combinación de mejoras, pero eso generaría una subclase distinta por cada combinación posible, algo que crece sin control a medida que se agregan más accesorios. El patrón Decorator resuelve esto envolviendo la moto con cada mejora elegida, sumando su precio y descripción de forma dinámica y en cualquier cantidad u orden, sin que la moto base tenga que saber nada de accesorios, pinturas ni complementos.
+- **Cómo lo aplicamos:**
+    - MotoComponente: interfaz común que comparten tanto la moto base como cualquier moto que ya tenga mejoras aplicadas, con los métodos getDescripcion y getPrecio.
+    - MotoBase: representa la moto sin ninguna mejora, con su modelo y su precio base.
+    - MejoraDecorator: envuelve un MotoComponente, ya sea la moto base o una moto que ya tiene mejoras, y le suma el nombre y el precio de una mejora nueva. Como delega en el objeto que envuelve, las mejoras se pueden apilar una tras otra sin límite.
+    - MejoraCatalogo y CatalogoMejoras: guardan el catálogo de mejoras disponibles con su nombre y precio, separado por completo de la lógica de decoración. Agregar una mejora nueva al taller es simplemente sumar una entrada más al catálogo.
+    - PersonalizadorMoto: arma la cadena de decoradores. Por cada mejora que el cliente elige, envuelve la moto actual en un nuevo MejoraDecorator, y usa Streams para calcular cuánto suman las mejoras aparte del precio base.
+    - TallerTurboAndes: guía al cliente pidiendo el modelo y precio base de la moto, muestra el catálogo numerado, arma la cadena de decoradores según lo que el cliente vaya eligiendo y al final imprime el resumen con la descripción completa, también construida con Streams, y el precio total.
 ---
 
 ## Reto 6 — Sala de Urgencias
@@ -149,4 +171,4 @@ polimórfica y extensible.
     - Hincha: se asocia con Jugador y con Entrenador (muchos a muchos) para animar, pedir autógrafos y publicar fotos, interactuando también de forma transparente con jugadores decorados.
 
 ![Diagrama UML - Reto 8](imagenes/reto8UML.png)
-
+
