@@ -73,7 +73,36 @@ polimórfica y extensible.
 
 ---
 
-<!-- Espacio reservado para documentación de Reto 2, Reto 3, Reto 4 y Reto 5 -->
+## Reto 2 — El Sastre a la Medida
+
+- **Patrón de Diseño:** Creacional
+- **Patrón Utilizado:** Builder
+- **Justificación:** el sastre arma cada traje pieza por pieza según lo que el cliente elija, combinando piezas obligatorias (tela, saco, pantalón) y opcionales (chaleco, forro, bordado) de múltiples maneras. Un constructor tradicional requeriría demasiados parámetros opcionales o múltiples sobrecargas difíciles de mantener; el patrón Builder permite separar el proceso de construcción incremental del objeto final resultante, haciéndolo extensible, legible e inmutable.
+- **Cómo lo aplicamos:**
+    - Traje: clase que representa el producto final terminado e inmutable; almacena la lista de piezas y calcula el precio total usando Streams (mapToDouble().sum()).
+    - PiezaTraje: modelo que encapsula los datos individuales de cada componente del traje (tipo, descripción y precio).
+    - TrajeBuilder: clase constructora que expone métodos fluidos encadenables (conTela, conSaco, conPantalon, conChaleco, conForro, conBordado) fijando los precios según el catálogo y construyendo el Traje mediante el método construir().
+    - SastreAMedida: clase principal interactiva que guía al usuario en la selección de piezas obligatorias y opcionales, delega la creación al builder y muestra el resumen final.
+
+---
+
+## Reto 3 — La Fábrica de Instrumentos
+
+- **Patrón de Diseño:** Creacional
+- **Patrón Utilizado:** Abstract Factory
+- **Justificación:** el problema exige crear familias de objetos (instrumentos) que varían en dos dimensiones ortogonales: la familia tímbrica (cuerda, viento, percusión) y la gama de fabricación (Estudiante, Profesional, Vintage). Abstract Factory permite definir una interfaz de creación y proveer implementaciones concretas para cada gama, garantizando que todos los instrumentos fabricados por una misma fábrica sean coherentes entre sí (mismos materiales, afinación y factor de precio), sin acoplar el código de pedido a ninguna gama específica.
+- **Cómo lo aplicamos:**
+    - InstrumentoFactory: interfaz de fábrica abstracta con el método crearInstrumento(familia, modelo) que todas las fábricas concretas deben implementar.
+    - FabricaEstudiante, FabricaProfesional, FabricaVintage: fábricas concretas que aplican el factor de precio y los materiales/afinación propios de cada gama al crear un Instrumento.
+    - Instrumento: clase del producto final que almacena familia, modelo, gama, materiales, afinación y precio calculado.
+    - CatalogoInstrumentos: repositorio de precios base por modelo; las fábricas concretas lo consultan para aplicar el factor de gama.
+    - SelectorFabrica: clase utilitaria que, dado el texto de gama ingresado por el usuario, devuelve la fábrica concreta correspondiente.
+    - PedidoArmoniaAndina: acumula los instrumentos creados y calcula el total usando Streams (mapToDouble().sum()); también imprime el resumen final.
+    - FabricaDeInstrumentos: clase principal interactiva que guía al usuario para elegir cantidad, familia, modelo y gama de cada instrumento, delegando la creación a la fábrica seleccionada.
+
+---
+
+<!-- Espacio reservado para documentación de Reto 4 y Reto 5 -->
 
 
 ---

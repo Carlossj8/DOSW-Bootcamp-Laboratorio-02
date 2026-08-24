@@ -74,8 +74,12 @@ public final class SalaUrgencias {
     }
 
     private static int leerCantidadPacientes(Scanner sc) {
-        while (sc.hasNextLine()) {
+        while (true) {
             System.out.print("¿Cuántos pacientes ingresan a urgencias? ");
+            System.out.flush();
+            if (!sc.hasNextLine()) {
+                break;
+            }
             String linea = sc.nextLine().trim();
             if (linea.isEmpty()) {
                 continue;

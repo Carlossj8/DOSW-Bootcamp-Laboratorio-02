@@ -38,10 +38,10 @@ public class Application {
 
                 break;
             case "2":
-                SastreAMedida.ejecutar();
+                SastreAMedida.ejecutar(sc);
                 break;
             case "3":
-                FabricaDeInstrumentos.ejecutar();
+                FabricaDeInstrumentos.ejecutar(sc);
                 break;
             case "4":
                 BalanzaMercado.ejecutar();
