@@ -170,5 +170,15 @@ polimórfica y extensible.
     - Entrenador: se asocia con Jugador (1 a muchos) para dirigir, evaluar y planear sesiones sobre cualquier jugador, decorado o no, gracias a que ambos comparten el mismo tipo base.
     - Hincha: se asocia con Jugador y con Entrenador (muchos a muchos) para animar, pedir autógrafos y publicar fotos, interactuando también de forma transparente con jugadores decorados.
 
+## Principios SOLID aplicados
+
+| Principio | Dónde | Cómo |
+|-------|---|---|
+| **SRP** | Jugador, Entrenador, Hincha, decoradores concretos | Cada clase tiene una única razón de cambio: Jugador solo gestiona datos y comportamiento base; Entrenador solo la dirección técnica; Hincha solo la interacción del fanático; y cada decorador concreto solo un atributo dinámico. |
+| **OCP** | Jugador, JugadorDecorator | La jerarquía está abierta a extensión y cerrada a modificación: se puede agregar una nueva posición heredando de Jugador, o un nuevo atributo dinámico creando un nuevo decorador, sin modificar ninguna clase existente. |
+| **LSP** | Arquero, Defensa, Delantero, JugadorDecorator sobre Jugador | Cualquier subclase de Jugador o cualquier decorador puede sustituir a un Jugador sin alterar el comportamiento esperado; por eso Entrenador.dirigir(jugador) y Hincha.animar(jugador) funcionan igual con un jugador base que con uno decorado. |
+| **ISP** | Entrenador, Hincha, decoradores concretos | Entrenador y Hincha solo conocen las operaciones generales de Jugador; cada decorador solo expone los getters y setters de su propio atributo, sin obligar a las demás clases a depender de métodos que no les corresponden. |
+| **DIP** | Entrenador, Hincha | Ambas clases dependen de la abstracción Jugador, no de las clases concretas Arquero, Defensa o Delantero, lo que les permite operar sobre cualquier jugador, decorado o no, sin conocer los detalles internos de cada posición. |
+
 ![Diagrama UML - Reto 8](imagenes/reto8UML.png)
 
